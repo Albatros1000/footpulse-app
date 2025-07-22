@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
@@ -8,9 +9,10 @@ import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Progress } from "@/components/ui/progress"
 import { Badge } from "@/components/ui/badge"
-import { Upload, User, Video, BarChart3, CheckCircle, Loader2, Zap } from "lucide-react"
+import { Upload, User, Video, BarChart3, CheckCircle, Loader2, Zap, Share2 } from "lucide-react"
 
 export default function CompleteRegistrationForm() {
+  const router = useRouter()
   const [currentStep, setCurrentStep] = useState(1)
   const [isAnalyzing, setIsAnalyzing] = useState(false)
   const [analysisResult, setAnalysisResult] = useState<any>(null)
@@ -104,6 +106,18 @@ export default function CompleteRegistrationForm() {
     } finally {
       setIsAnalyzing(false)
     }
+  }
+
+  const handleGoToDashboard = () => {
+    // Rediriger vers le dashboard joueur
+    router.push("/dashboard")
+  }
+
+  const handleShareProfile = () => {
+    // Copier le lien dans le presse-papier
+    const profileUrl = `${window.location.origin}/dashboard`
+    navigator.clipboard.writeText(profileUrl)
+    alert("Lien du profil copié dans le presse-papier !")
   }
 
   return (
@@ -462,10 +476,14 @@ export default function CompleteRegistrationForm() {
                       )}
 
                       <div className="flex space-x-4">
-                        <Button className="flex-1 bg-footpulse-electric text-footpulse-dark hover:bg-blue-400">
+                        <Button
+                          onClick={handleGoToDashboard}
+                          className="flex-1 bg-footpulse-electric text-footpulse-dark hover:bg-blue-400"
+                        >
                           Accéder au Dashboard
                         </Button>
-                        <Button variant="outline" className="flex-1 bg-transparent">
+                        <Button variant="outline" onClick={handleShareProfile} className="flex-1 bg-transparent">
+                          <Share2 className="mr-2" size={16} />
                           Partager le profil
                         </Button>
                       </div>
